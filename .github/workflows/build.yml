@@ -5,16 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-22.04-arm
     steps:
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false # 避免删除预缓存工具
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      # - name: Free Disk Space
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: false # 避免删除预缓存工具
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: true
+      #     swap-storage: true
 
       - name: Install Bazel
         run: |
@@ -23,14 +23,14 @@ jobs:
           sudo mv ./bazel_nojdk-8.1.0-linux-arm64 /usr/bin/bazel
           sudo chmod +x /usr/bin/bazel
 
-      - name: Install JDK
-        run: |
-          sudo apt install -y openjdk-21-jdk ca-certificates
-          sudo update-ca-certificates
+      # - name: Install JDK
+      #   run: |
+      #     sudo apt install -y openjdk-21-jdk ca-certificates
+      #     sudo update-ca-certificates
       
-      - name: Install Other Dependencies
-        run: |
-          sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
+      # - name: Install Other Dependencies
+      #   run: |
+      #     sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
 
       - name: Build Cuttlefish
         run: |
