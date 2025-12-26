@@ -5,6 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-22.04-arm
     steps:
+      - name: Remove Bazelisk
+        run: sudo rm -f /usr/local/bin/bazel
+    
       - name: Install Bazel
         run: |
           wget https://github.com/bazelbuild/bazel/releases/download/8.1.0/bazel-8.1.0-linux-arm64
