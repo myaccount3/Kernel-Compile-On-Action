@@ -19,7 +19,7 @@ jobs:
       - name: Install Bazel
         run: |
           wget https://github.com/bazelbuild/bazel/releases/download/8.1.0/bazel-8.1.0-linux-arm64
-          mv ./bazel-8.1.0-linux-arm64 /usr/bin/bazel
+          sudo mv ./bazel-8.1.0-linux-arm64 /usr/bin/bazel
       
       - name: Install Other Dependencies
         run: |
