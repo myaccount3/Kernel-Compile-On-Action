@@ -5,16 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-22.04-arm
     steps:
-      # - name: Free Disk Space
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: false # 避免删除预缓存工具
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false # 避免删除预缓存工具
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
       - name: Install Bazel
         run: |
@@ -33,8 +33,6 @@ jobs:
           sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
 
       - name: Build Cuttlefish
-        env:
-          JAVA_HOME: /usr/lib/jvm/java-21-openjdk-arm64
         run: |
           git clone https://github.com/myaccount3/android-cuttlefish
           cd android-cuttlefish
