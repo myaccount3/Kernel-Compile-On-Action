@@ -5,16 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-22.04-arm
     steps:
-      # - name: Free Disk Space
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: false # 避免删除预缓存工具
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false # 避免删除预缓存工具
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
       - name: Install Bazel
         run: |
@@ -36,7 +36,7 @@ jobs:
         run: |
           git clone https://github.com/myaccount3/android-cuttlefish
           cd android-cuttlefish
-          tools/buildutils/build_packages.sh
+          ./tools/buildutils/build_packages.sh
 
       - name: Create Release and Upload Release Asset
         uses: softprops/action-gh-release@v1
