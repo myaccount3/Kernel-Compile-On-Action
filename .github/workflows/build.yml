@@ -25,12 +25,12 @@ jobs:
 
       - name: Install JDK
         run: |
-          sudo apt install -y openjdk-17-jdk ca-certificates
+          sudo apt install -y openjdk-21-jdk ca-certificates
           sudo update-ca-certificates
 
       - name: Use system JDK for Bazel
         env:
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-arm64
+          JAVA_HOME: /usr/lib/jvm/java-21-openjdk-arm64
         run: bazel version
       
       # - name: Install Other Dependencies
