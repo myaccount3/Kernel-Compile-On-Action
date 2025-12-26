@@ -5,45 +5,50 @@ jobs:
   build:
     runs-on: ubuntu-22.04-arm
     steps:
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false # 避免删除预缓存工具
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      # - name: Free Disk Space
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: false # 避免删除预缓存工具
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: true
+      #     swap-storage: true
 
       - name: Install Bazel
         run: |
           sudo rm -f /usr/local/bin/bazel
-          wget https://github.com/bazelbuild/bazel/releases/download/8.1.0/bazel-8.1.0-linux-arm64
-          sudo mv ./bazel-8.1.0-linux-arm64 /usr/bin/bazel
+          wget https://github.com/bazelbuild/bazel/releases/download/8.1.0/bazel_nojdk-8.1.0-linux-arm64
+          sudo mv ./bazel_nojdk-8.1.0-linux-arm64 /usr/bin/bazel
           sudo chmod +x /usr/bin/bazel
+
+      - name: Install JDK
+        run: |
+          sudo apt install -y openjdk-17-jdk ca-certificates
+          sudo update-ca-certificates
+
+      - name: Use system JDK for Bazel
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-arm64
+        run: bazel version
       
-      - name: Install Other Dependencies
-        run: |
-          sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
+      # - name: Install Other Dependencies
+      #   run: |
+      #     sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
 
-      - name: Update CA certificates
-        run: |
-          sudo apt-get install -y ca-certificates ca-certificates-java
-          sudo update-ca-certificates -f
+      # - name: Build Cuttlefish
+      #   run: |
+      #     git clone https://github.com/myaccount3/android-cuttlefish
+      #     cd android-cuttlefish
+      #     tools/buildutils/build_packages.sh
 
-      - name: Build Cuttlefish
-        run: |
-          git clone https://github.com/myaccount3/android-cuttlefish
-          cd android-cuttlefish
-          tools/buildutils/build_packages.sh
-
-      - name: Create Release and Upload Release Asset
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: Cuttlefish-ARM64
-          name: Cuttlefish-ARM64
-          body: Cuttlefish-ARM64 compiled .deb files
-          draft: false
-          prerelease: false
-          files: ./*.deb
+      # - name: Create Release and Upload Release Asset
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: Cuttlefish-ARM64
+      #     name: Cuttlefish-ARM64
+      #     body: Cuttlefish-ARM64 compiled .deb files
+      #     draft: false
+      #     prerelease: false
+      #     files: ./*.deb
