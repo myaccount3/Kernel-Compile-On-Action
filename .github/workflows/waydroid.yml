@@ -1,0 +1,16 @@
+name: Waydroid
+on:
+  workflow_dispatch: # 支持手动触发
+jobs:
+  build:
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - name: Install Waydroid
+        run: |
+          sudo apt install curl ca-certificates -y
+          curl -s https://repo.waydro.id | sudo bash
+          sudo apt install waydroid -y
+
+      - name: Waydroid init
+        run: |
+          sudo waydroid init
