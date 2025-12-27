@@ -19,31 +19,35 @@ jobs:
       - name: Install Bazel
         run: |
           sudo rm -f /usr/local/bin/bazel
-          wget https://github.com/bazelbuild/bazel/releases/download/8.1.0/bazel_nojdk-8.1.0-linux-arm64
-          sudo mv ./bazel_nojdk-8.1.0-linux-arm64 /usr/bin/bazel
+          wget https://github.com/bazelbuild/bazel/releases/download/8.5.0/bazel-8.5.0-linux-arm64
+          sudo mv ./bazel-8.5.0-linux-arm64 /usr/bin/bazel
           sudo chmod +x /usr/bin/bazel
+
+      - name: Check bazel Version
+        run: |
+          bazel version
 
       # - name: Install JDK
       #   run: |
       #     sudo apt install -y openjdk-21-jdk ca-certificates
       #     sudo update-ca-certificates
       
-      - name: Install Dependencies
-        run: |
-          sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
+      # - name: Install Dependencies
+      #   run: |
+      #     sudo apt install -y git devscripts equivs config-package-dev debhelper-compat golang curl
 
-      - name: Build Cuttlefish
-        run: |
-          git clone https://github.com/myaccount3/android-cuttlefish
-          cd android-cuttlefish
-          ./tools/buildutils/build_packages.sh
+      # - name: Build Cuttlefish
+      #   run: |
+      #     git clone https://github.com/myaccount3/android-cuttlefish
+      #     cd android-cuttlefish
+      #     ./tools/buildutils/build_packages.sh
 
-      - name: Create Release and Upload Release Asset
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: Cuttlefish-ARM64
-          name: Cuttlefish-ARM64
-          body: Cuttlefish-ARM64 compiled .deb files
-          draft: false
-          prerelease: false
-          files: ./*.deb
+      # - name: Create Release and Upload Release Asset
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: Cuttlefish-ARM64
+      #     name: Cuttlefish-ARM64
+      #     body: Cuttlefish-ARM64 compiled .deb files
+      #     draft: false
+      #     prerelease: false
+      #     files: ./*.deb
