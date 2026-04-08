@@ -1,0 +1,41 @@
+name: build
+on:
+  workflow_dispatch: # 支持手动触发
+jobs:
+  build:
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential bc bison flex libssl-dev libelf-dev dwarves \
+            fakeroot git
+
+      - name: Compile
+        run: |
+          git clone https://github.com/msm8916-mainline/linux.git
+          cd ./linux
+          make msm8916_defconfig
+          make -j$(nproc)
+          make -j$(nproc) deb-pkg
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: custom-kernel
+          path: |
+            arch/arm64/boot/Image.gz
+            arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+            ../*.deb
