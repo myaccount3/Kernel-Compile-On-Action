@@ -20,7 +20,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: msm8916-mainline/linux
-          ref: msm8916/6.12
+          ref: msm8916/6.6
+
+      - name: Checkout config
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            config
 
       - name: Install dependencies
         run: |
@@ -31,7 +37,8 @@ jobs:
 
       - name: Generate config
         run: |
-          make msm8916_defconfig
+          mv ./config ./.config
+          make -j$(nproc) olddefconfig
 
       - name: View config
         run: |
