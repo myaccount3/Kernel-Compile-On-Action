@@ -37,7 +37,6 @@ jobs:
 
       - name: Generate config
         run: |
-          mv ./config ./.config
           make -j$(nproc) olddefconfig
 
       - name: View config
