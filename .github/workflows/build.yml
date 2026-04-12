@@ -5,16 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-24.04-arm
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: true
+      #     android: true
+      #     dotnet: true
+      #     haskell: true
+      #     large-packages: true
+      #     docker-images: true
+      #     swap-storage: true
 
       - name: Checkout source
         uses: actions/checkout@v4
@@ -22,42 +22,48 @@ jobs:
           repository: msm8916-mainline/linux
           ref: msm8916/6.6
 
+      - name: Get current directory
+        run: pwd
+
       - name: Checkout config
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
             config
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential bc bison flex libssl-dev libelf-dev dwarves \
-            fakeroot git debhelper libdw-dev
+      - name: Get current directory
+        run: pwd
 
-      - name: Generate config
-        run: |
-          mv ./config ./.config
-          make -j$(nproc) olddefconfig
+      # - name: Install dependencies
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y \
+      #       build-essential bc bison flex libssl-dev libelf-dev dwarves \
+      #       fakeroot git debhelper libdw-dev
 
-      - name: View config
-        run: |
-          cat ./.config
+      # - name: Generate config
+      #   run: |
+      #     mv ./config ./.config
+      #     make -j$(nproc) olddefconfig
 
-      - name: Compile
-        run: |
-          make -j$(nproc)
-          make -j$(nproc) bindeb-pkg
+      # - name: View config
+      #   run: |
+      #     cat ./.config
 
-      - name: Workaround actions/upload-artifact
-        run: |
-          echo "artifacts_path=$(realpath ..)" >> $GITHUB_ENV
+      # - name: Compile
+      #   run: |
+      #     make -j$(nproc)
+      #     make -j$(nproc) bindeb-pkg
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: custom-kernel
-          path: |
-            arch/arm64/boot/Image.gz
-            arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
-            ${{ env.artifacts_path }}/*.deb
+      # - name: Workaround actions/upload-artifact
+      #   run: |
+      #     echo "artifacts_path=$(realpath ..)" >> $GITHUB_ENV
+
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: custom-kernel
+      #     path: |
+      #       arch/arm64/boot/Image.gz
+      #       arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
+      #       ${{ env.artifacts_path }}/*.deb
