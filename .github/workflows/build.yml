@@ -5,31 +5,46 @@ jobs:
   build:
     runs-on: ubuntu-24.04-arm
     steps:
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: true
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
-
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          repository: msm8916-mainline/linux
+          ref: msm8916/6.12
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt build-dep .
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential bc bison flex libssl-dev libelf-dev dwarves \
+            fakeroot git debhelper libdw-dev
+
+      - name: Generate config
+        run: |
+          make msm8916_defconfig
+
+      - name: View config
+        run: |
+          cat ./.config
 
       - name: Compile
         run: |
-          make msm8916_defconfig
           make -j$(nproc)
-          make -j$(nproc) deb-pkg
+          make -j$(nproc) bindeb-pkg
+
+      - name: Workaround actions/upload-artifact
+        run: |
+          echo "artifacts_path=$(realpath ..)" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -38,4 +53,4 @@ jobs:
           path: |
             arch/arm64/boot/Image.gz
             arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
-            ../*.deb
+            ${{ env.artifacts_path }}/*.deb
