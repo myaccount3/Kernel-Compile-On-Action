@@ -22,9 +22,6 @@ jobs:
           repository: msm8916-mainline/linux
           ref: msm8916/6.6
 
-      - name: Get current directory
-        run: pwd
-
       - name: Checkout config
         uses: actions/checkout@v4
         with:
@@ -32,7 +29,7 @@ jobs:
             config
 
       - name: Get current directory
-        run: pwd
+        run: ls -alh
 
       # - name: Install dependencies
       #   run: |
