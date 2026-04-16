@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: msm8916-mainline/linux
-          ref: msm8916/6.6
+          ref: msm8916/6.12.1
 
       - name: Get config
         run: |
