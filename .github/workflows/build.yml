@@ -5,16 +5,16 @@ jobs:
   build:
     runs-on: ubuntu-24.04-arm
     steps:
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: true
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     docker-images: true
-      #     swap-storage: true
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
       - name: Checkout source
         uses: actions/checkout@v4
@@ -28,12 +28,12 @@ jobs:
           mv ./Kernel-Compile-On-Action/config ./.config
           rm -rf ./Kernel-Compile-On-Action
 
-      # - name: Install dependencies
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y \
-      #       build-essential bc bison flex libssl-dev libelf-dev dwarves \
-      #       fakeroot git debhelper libdw-dev
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential bc bison flex libssl-dev libelf-dev dwarves \
+            fakeroot git debhelper libdw-dev
 
       - name: Generate config
         run: |
